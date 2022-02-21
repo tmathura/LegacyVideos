@@ -7,7 +7,7 @@
     <Name>LegacyVideos</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>1a4dd772-ba03-47c2-900c-28c77b02dad6</ProjectGuid>
+    <ProjectGuid>4f5e4611-8236-4c62-9490-4a9cc06b1879</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath></RootPath>

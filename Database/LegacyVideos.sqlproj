@@ -171,6 +171,8 @@
   <ItemGroup>
     <None Include="Provisioning\CreateDatabase.sql" />
     <None Include="Provisioning\DropDatabase.sql" />
+    <None Include="Schema-Model\dbo\Tables\movie_type.sql" />
+    <None Include="Migrations\001_20220222-1318_teshvierm_create_movie_type.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\01_Initialize_Deployment.sql" />

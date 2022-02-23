@@ -30,8 +30,5 @@ IF NOT EXISTS
           AND parent_object_id = OBJECT_ID(N'[dbo].[movies]')
 )
 BEGIN
-    ALTER TABLE dbo.[movies] WITH CHECK
-    ADD CONSTRAINT [FK_movies_movie_type_id]
-        FOREIGN KEY ([movie_type_id])
-        REFERENCES dbo.[movie_type] ([id]);
+    ALTER TABLE dbo.[movies] WITH CHECK ADD CONSTRAINT [FK_movies_movie_type_id] FOREIGN KEY ([movie_type_id]) REFERENCES dbo.[movie_type] ([id]);
 END;

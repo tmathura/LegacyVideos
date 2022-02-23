@@ -180,6 +180,8 @@
     <None Include="Schema-Model\dbo\Tables\series_episode.sql" />
     <None Include="Migrations\004_20220223-1136_teshvierm_add_table_series_episode.sql" />
     <None Include="Migrations\005_20220223-1157_teshvierm_alter_table_series_add_column_anime.sql" />
+    <None Include="Programmable Objects\dbo\Stored Procedures\movies_ins.sql" />
+    <None Include="Migrations\006_20220223-1911_teshvierm_alter_table_movies_delete_column_announced_date.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\01_Initialize_Deployment.sql" />

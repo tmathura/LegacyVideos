@@ -175,6 +175,8 @@
     <None Include="Schema-Model\dbo\Tables\movies.sql" />
     <None Include="Migrations\002_20220223-1017_teshvierm_add_table_movies.sql" />
     <None Include="Migrations\001_20220222-1318_teshvierm_add_table_movie_type.sql" />
+    <None Include="Schema-Model\dbo\Tables\series.sql" />
+    <None Include="Migrations\003_20220223-1043_teshvierm_add_table_series.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\01_Initialize_Deployment.sql" />

@@ -16,8 +16,7 @@ BEGIN
         [release_date] [DATETIME] NOT NULL,
         [announced_date] [DATETIME] NOT NULL,
         [added_date] [DATETIME] NOT NULL,
-        [owned] [BIT] NOT NULL
-            CONSTRAINT DF_movies_owned DEFAULT 0,
+        [owned] [BIT] NOT NULL CONSTRAINT DF_movies_owned DEFAULT 0,
         CONSTRAINT [PK_movies_id] PRIMARY KEY CLUSTERED ([id] ASC) ON [PRIMARY]
     ) ON [PRIMARY];
 END;

@@ -28,7 +28,7 @@ BEGIN
     DECLARE @owned [BIT] = 1;
 
     EXEC tSQLt.FakeTable @TableName = 'movies', @Identity = 1;
-    exec tSQLt.ApplyConstraint @TableName = 'movies', @ConstraintName = 'FK_movies_movie_type_id', @NoCascade = 1;
+    EXEC tSQLt.ApplyConstraint @TableName = 'movies', @ConstraintName = 'FK_movies_movie_type_id', @NoCascade = 1;
 
     --Act
     DECLARE @id INT;
@@ -40,7 +40,6 @@ BEGIN
                               @added_date = @added_date,
                               @owned = @owned;
 
-    PRINT @id;
     SELECT id,
            title,
            [description],

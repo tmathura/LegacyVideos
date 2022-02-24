@@ -34,6 +34,8 @@ BEGIN
 
 
     DECLARE @series_id INT = 1;
+    DECLARE @episode_number INT = 1;
+    DECLARE @title [VARCHAR](200) = 'Pilot';
     DECLARE @description [VARCHAR](2000) = 'Sam is about to graduate from college and has an interview set up to join one of the most prestigious law schools in the country. His brother Dean, whom he has not seen since he went to college, shows up in the middle of the night and tells him their father is missing while on a hunting trip. Leaving his girlfriend behind to find their dad, Sam joins Dean in an effort to find their father in a little town called Jericho, where unmarried men disappear without a trace.';
     DECLARE @duration INT = 47;
     DECLARE @release_date [DATETIME] = DATEFROMPARTS(2005, 09, 14);
@@ -46,6 +48,8 @@ BEGIN
     --Act
     DECLARE @id INT;
     EXEC @id = dbo.series_episode_ins @series_id = @series_id,
+                                      @episode_number = @episode_number,
+                                      @title = @title,
                                       @description = @description,
                                       @duration = @duration,
                                       @release_date = @release_date,
@@ -54,6 +58,8 @@ BEGIN
 
     SELECT id,
            series_id,
+           episode_number,
+           title,
            [description],
            duration,
            release_date,
@@ -68,6 +74,8 @@ BEGIN
     (
         [id] [INT] IDENTITY(1, 1) NOT NULL,
         [series_id] [INT] NOT NULL,
+        [title] [VARCHAR](200) NOT NULL,
+        [episode_number] [INT] NOT NULL,
         [description] [VARCHAR](2000) NOT NULL,
         [duration] [INT] NOT NULL,
         [release_date] [DATETIME] NOT NULL,
@@ -78,6 +86,8 @@ BEGIN
     INSERT INTO dbo.expected
     (
         series_id,
+        episode_number,
+        title,
         [description],
         duration,
         release_date,
@@ -85,6 +95,8 @@ BEGIN
         owned
     )
     SELECT @series_id,    -- title - varchar(200)
+           @episode_number, -- episode_number - int
+           @title,          -- title - varchar(200)
            @description,  -- description - varchar(2000)
            @duration,     -- duration - int
            @release_date, -- release_date - datetime

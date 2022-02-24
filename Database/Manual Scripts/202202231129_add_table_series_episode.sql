@@ -10,6 +10,8 @@ BEGIN
     (
         [id] [INT] IDENTITY(1, 1) NOT NULL,
         [series_id] [INT] NOT NULL,
+        [episode_number] [INT] NOT NULL,
+        [title] [VARCHAR] (200) NOT NULL,
         [description] [VARCHAR](2000) NOT NULL,
         [duration] [INT] NOT NULL,
         [release_date] [DATETIME] NOT NULL,

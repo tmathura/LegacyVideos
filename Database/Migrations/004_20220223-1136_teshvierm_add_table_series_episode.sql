@@ -8,6 +8,8 @@ CREATE TABLE [dbo].[series_episode]
 (
 [id] [int] NOT NULL IDENTITY(1, 1),
 [series_id] [int] NOT NULL,
+[episode_number] [int] NOT NULL,
+[title] [varchar] (200) NOT NULL,
 [description] [varchar] (2000) NOT NULL,
 [duration] [int] NOT NULL,
 [release_date] [datetime] NOT NULL,

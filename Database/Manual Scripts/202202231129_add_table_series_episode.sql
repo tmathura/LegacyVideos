@@ -17,7 +17,11 @@ BEGIN
         [release_date] [DATETIME] NOT NULL,
         [added_date] [DATETIME] NOT NULL,
         [owned] [BIT] NOT NULL CONSTRAINT DF_series_episode_owned DEFAULT 0,
-        CONSTRAINT [PK_series_episode_id] PRIMARY KEY CLUSTERED ([id] ASC) ON [PRIMARY]
+        CONSTRAINT [PK_series_episode_id] PRIMARY KEY CLUSTERED ([id] ASC) ON [PRIMARY],
+		CONSTRAINT [IX_series_id_episode_number] UNIQUE NONCLUSTERED
+		(
+		[series_id], [episode_number] ASC
+		) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
     ) ON [PRIMARY];
 END;
 GO

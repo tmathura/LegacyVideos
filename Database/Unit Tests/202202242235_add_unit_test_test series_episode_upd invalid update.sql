@@ -1,14 +1,24 @@
-IF OBJECT_ID('[unit_tests].[test series_episode_get get by owned]') IS NOT NULL
-    DROP PROCEDURE [unit_tests].[test series_episode_get get by owned];
+IF OBJECT_ID('[unit_tests].[test series_episode_upd invalid update]') IS NOT NULL
+    DROP PROCEDURE [unit_tests].[test series_episode_upd invalid update];
 GO
 
--- test that series_episode_get gets the series episode by owned
-CREATE PROCEDURE [unit_tests].[test series_episode_get get by owned]
+-- test that serie_episodes_upd does not update the series episode when using an existing episode_number
+CREATE PROCEDURE [unit_tests].[test series_episode_upd invalid update]
 AS
 BEGIN
     --Assemble
     IF OBJECT_ID('actual') IS NOT NULL DROP TABLE dbo.actual;
     IF OBJECT_ID('expected') IS NOT NULL DROP TABLE dbo.expected;
+
+    DECLARE @id INT = 2;
+    DECLARE @series_id INT = 1;
+    DECLARE @episode_number INT = 2;
+    DECLARE @title [VARCHAR](200) = 'Wendigo';
+    DECLARE @description [VARCHAR](2000) = 'Sam and Dean pose as Park Rangers to help a brother and sister search for their lost sibling, who the Winchester brothers believe may have been taken by a Wendigo.';
+    DECLARE @duration INT = 43;
+    DECLARE @release_date [DATETIME] = DATEFROMPARTS(2005, 09, 21);
+    DECLARE @added_date [DATETIME] = GETDATE();
+    DECLARE @owned [BIT] = 1;
 
     EXEC tSQLt.FakeTable @TableName = 'series';
 
@@ -32,8 +42,6 @@ BEGIN
            1,                                                                                                                                                                     -- owned - bit
            0                                                                                                                                                                      -- anime - bit
     ;
-    
-    DECLARE @owned INT = 1;
 
     EXEC tSQLt.FakeTable @TableName = 'series_episode';
     EXEC tSQLt.ApplyConstraint @TableName = 'series_episode', @ConstraintName = 'FK_series_episode_series_id', @NoCascade = 1;
@@ -51,7 +59,7 @@ BEGIN
         added_date,
         owned
     )
-    SELECT 1,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       -- id - int
+    SELECT 1,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -- id - int
            1,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -- title - varchar(200)
            1,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -- episode_number - int
            'Pilot',                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -- title - varchar(200)
@@ -74,32 +82,18 @@ BEGIN
         added_date,
         owned
     )
-    SELECT 2,                                                                                                                                                                     -- id - int
-           1,                                                                                                                                                                     -- title - varchar(200)
-           2,                                                                                                                                                                     -- episode_number - int
-           'Wendigo',                                                                                                                                                             -- title - varchar(200)
-           'Sam and Dean pose as Park Rangers to help a brother and sister search for their lost sibling, who the Winchester brothers believe may have been taken by a Wendigo.', -- description - varchar(2000)
-           43,                                                                                                                                                                    -- duration - int
-           DATEFROMPARTS(2005, 09, 21),                                                                                                                                           -- release_date - datetime
-           GETDATE(),                                                                                                                                                             -- added_date - datetime
-           1;                                                                                                                                                                     -- owned - bit                                                                                                                                                                                                                                                                                                                                      -- owned - bit
+    SELECT @id,             -- id - int
+           @series_id,      -- title - varchar(200)
+           @episode_number, -- episode_number - int
+           @title,          -- title - varchar(200)
+           @description,    -- description - varchar(2000)
+           @duration,       -- duration - int
+           @release_date,   -- release_date - datetime
+           @added_date,     -- added_date - datetime
+           @owned;          -- owned - bit                                                                                                                                                                                                                                                                                                                                      -- owned - bit
     ;
 
-    --Act
-    CREATE TABLE dbo.actual
-    (
-        [id] [INT] IDENTITY(1, 1) NOT NULL,
-        [series_id] [INT] NOT NULL,
-        [title] [VARCHAR](200) NOT NULL,
-        [episode_number] [INT] NOT NULL,
-        [description] [VARCHAR](2000) NOT NULL,
-        [duration] [INT] NOT NULL,
-        [release_date] [DATETIME] NOT NULL,
-        [added_date] [DATETIME] NOT NULL,
-        [owned] [BIT] NOT NULL,
-    );
-
-    INSERT INTO dbo.actual
+    INSERT INTO dbo.series_episode
     (
         id,
         series_id,
@@ -111,23 +105,30 @@ BEGIN
         added_date,
         owned
     )
-    EXEC dbo.series_episode_get @id = NULL, @title = NULL, @owned = @owned, @series_id = NULL;
+    SELECT 3,                                                                                                                                                                                                                                                                                                                                                         -- id - int
+           1,                                                                                                                                                                                                                                                                                                                                                         -- title - varchar(200)
+           3,                                                                                                                                                                                                                                                                                                                                                         -- episode_number - int
+           'Dead in the Water',                                                                                                                                                                                                                                                                                                                                       -- title - varchar(200)
+           'While going through the newspaper, Dean comes across a mysterious drowning victim. Upon further research they soon discover more people who have drowned in the same lake, but their bodies were never found. When the boys show up in town they befriend a boy whose father has drowned. The brothers come to believe the lake is haunted by a spirit.', -- description - varchar(2000)
+           43,                                                                                                                                                                                                                                                                                                                                                        -- duration - int
+           DATEFROMPARTS(2005, 09, 28),                                                                                                                                                                                                                                                                                                                               -- release_date - datetime
+           GETDATE(),                                                                                                                                                                                                                                                                                                                                                 -- added_date - datetime
+           1;                                                                                                                                                                                                                                                                                                                                                         -- owned - bit                                                                                                                                                                                  -- owned - bit
+    ;
 
-    --Assert
-    SELECT id,
-           series_id,
-           episode_number,
-           title,
-           [description],
-           duration,
-           release_date,
-           added_date,
-           owned
-    INTO dbo.expected
-    FROM dbo.series_episode
-    WHERE owned = @owned;
+    --Assert: need to do the the assert before the act as you need to tell that an exception is expected
+    EXEC tSQLt.ExpectException @ExpectedMessagePattern = '%Cannot insert duplicate key in object ''dbo.series_episode''.%', @ExpectedSeverity = NULL, @ExpectedState = NULL;
 
-    EXEC tSQLt.AssertEqualsTable @Expected = 'expected', @Actual = 'actual', @Message = 'Get record does not match expected record.';
+    --Act
+    EXEC dbo.series_episode_upd @id = @id,
+                                @series_id = @series_id,
+                                @episode_number = 3,
+                                @title = @title,
+                                @description = @description,
+                                @duration = @duration,
+                                @release_date = @release_date,
+                                @added_date = @added_date,
+                                @owned = @owned;
 END;
 
 

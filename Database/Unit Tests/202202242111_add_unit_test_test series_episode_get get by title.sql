@@ -38,6 +38,7 @@ BEGIN
 
     EXEC tSQLt.FakeTable @TableName = 'series_episode';
     EXEC tSQLt.ApplyConstraint @TableName = 'series_episode', @ConstraintName = 'FK_series_episode_series_id', @NoCascade = 1;
+    EXEC tSQLt.ApplyConstraint @TableName = 'series_episode', @ConstraintName = 'IX_series_id_episode_number';
 
     INSERT INTO dbo.series_episode
     (

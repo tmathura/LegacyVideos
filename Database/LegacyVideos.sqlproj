@@ -186,6 +186,7 @@
     <None Include="Programmable Objects\dbo\Stored Procedures\movies_by_released_date_get.sql" />
     <None Include="Programmable Objects\dbo\Stored Procedures\movies_upd.sql" />
     <None Include="Migrations\007_20220224-1400_teshvierm_alter_table_series_drop_column_announced_date.sql" />
+    <None Include="Programmable Objects\dbo\Stored Procedures\series_ins.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\01_Initialize_Deployment.sql" />

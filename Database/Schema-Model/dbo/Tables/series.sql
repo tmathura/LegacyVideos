@@ -9,7 +9,6 @@ CREATE TABLE [dbo].[series]
 [title] [varchar] (200) NOT NULL,
 [description] [varchar] (2000) NOT NULL,
 [release_date] [datetime] NOT NULL,
-[announced_date] [datetime] NOT NULL,
 [added_date] [datetime] NOT NULL,
 [ended] [bit] NOT NULL CONSTRAINT [DF_series_ended] DEFAULT ((0)),
 [owned] [bit] NOT NULL CONSTRAINT [DF_series_owned] DEFAULT ((0)),

@@ -32,7 +32,6 @@ BEGIN
            1,                                                                                                                                                                     -- owned - bit
            0;                                                                                                                                                                     -- anime - bit
 
-
     DECLARE @series_id INT = 1;
     DECLARE @episode_number INT = 1;
     DECLARE @title [VARCHAR](200) = 'Pilot';

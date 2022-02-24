@@ -14,9 +14,10 @@ BEGIN
 
     INSERT INTO dbo.movie_type
     (
+        [id],
         [type]
     )
-    SELECT 'dvd';
+    SELECT 1, 'dvd';
 
     DECLARE @title [VARCHAR](200) = 'The Matrix';
     DECLARE @description [VARCHAR](2000) = 'Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.';
@@ -27,6 +28,7 @@ BEGIN
     DECLARE @owned [BIT] = 1;
 
     EXEC tSQLt.FakeTable @TableName = 'movies', @Identity = 1;
+    exec tSQLt.ApplyConstraint @TableName = 'movies', @ConstraintName = 'FK_movies_movie_type_id', @NoCascade = 1;
 
     --Act
     DECLARE @id INT;

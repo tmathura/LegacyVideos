@@ -17,3 +17,5 @@ CREATE TABLE [dbo].[series]
 GO
 ALTER TABLE [dbo].[series] ADD CONSTRAINT [PK_series_id] PRIMARY KEY CLUSTERED ([id])
 GO
+CREATE NONCLUSTERED INDEX [IX_series_release_date] ON [dbo].[series] ([release_date])
+GO

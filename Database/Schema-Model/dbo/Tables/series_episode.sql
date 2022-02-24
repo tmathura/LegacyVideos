@@ -18,6 +18,8 @@ CREATE TABLE [dbo].[series_episode]
 GO
 ALTER TABLE [dbo].[series_episode] ADD CONSTRAINT [PK_series_episode_id] PRIMARY KEY CLUSTERED ([id])
 GO
+CREATE NONCLUSTERED INDEX [IX_series_episode_release_date] ON [dbo].[series_episode] ([release_date])
+GO
 ALTER TABLE [dbo].[series_episode] ADD CONSTRAINT [IX_series_id_episode_number] UNIQUE NONCLUSTERED ([series_id], [episode_number])
 GO
 ALTER TABLE [dbo].[series_episode] ADD CONSTRAINT [FK_series_episode_series_id] FOREIGN KEY ([series_id]) REFERENCES [dbo].[series] ([id])

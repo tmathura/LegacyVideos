@@ -17,5 +17,7 @@ CREATE TABLE [dbo].[movies]
 GO
 ALTER TABLE [dbo].[movies] ADD CONSTRAINT [PK_movies_id] PRIMARY KEY CLUSTERED ([id])
 GO
+CREATE NONCLUSTERED INDEX [IX_movies_release_date] ON [dbo].[movies] ([release_date])
+GO
 ALTER TABLE [dbo].[movies] ADD CONSTRAINT [FK_movies_movie_type_id] FOREIGN KEY ([movie_type_id]) REFERENCES [dbo].[movie_type] ([id])
 GO

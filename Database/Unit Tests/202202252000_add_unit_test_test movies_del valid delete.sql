@@ -2,7 +2,7 @@ IF OBJECT_ID('[unit_tests].[test movies_del valid delete]') IS NOT NULL
     DROP PROCEDURE [unit_tests].[test movies_del valid delete];
 GO
 
--- test that movies_upd updates the movie correctly
+-- test that movies_del deletes the movie correctly
 CREATE PROCEDURE [unit_tests].[test movies_del valid delete]
 AS
 BEGIN
@@ -106,7 +106,7 @@ BEGIN
     EXEC dbo.movies_del @id = @id
 
     --Assert
-    DECLARE @deleted INT = CASE WHEN EXISTS((SELECT TOP(1) duration FROM dbo.movies WHERE id = @id ORDER BY id)) THEN 1 ELSE 0 END;
+    DECLARE @deleted BIT = CASE WHEN EXISTS((SELECT TOP(1) duration FROM dbo.movies WHERE id = @id ORDER BY id)) THEN 1 ELSE 0 END;
 
     EXEC tSQLt.assertEquals @Expected = 0, @Actual = @deleted, @Message = 'Record not deleted.';
 END;

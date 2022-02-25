@@ -198,6 +198,7 @@
     <None Include="Migrations\009_20220224-2304_teshvierm_alter_table_movies_add_index_IX_movies_release_date.sql" />
     <None Include="Migrations\010_20220224-2305_teshvierm_alter_table_series_add_index_IX_movies_release_date.sql" />
     <None Include="Migrations\011_20220224-2305_teshvierm_alter_table_series_episode_add_index_IX_movies_release_date.sql" />
+    <None Include="Migrations\012_20220225-1541_teshvierm_insert_into_movie_type_static_data.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Pre-Deployment\01_Initialize_Deployment.sql" />

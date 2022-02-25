@@ -44,5 +44,11 @@ namespace LegacyVideos.Infrastructure.Interfaces
         /// </summary>
         /// <param name="movie"><see cref="Movie"/> to update.</param>
         Task UpdateMovie(Movie movie);
+
+        /// <summary>
+        /// Delete movie.
+        /// </summary>
+        /// <param name="id"><see cref="Movie"/> id to delete.</param>
+        Task DeleteMovie(int id);
     }
 }

@@ -19,6 +19,10 @@ namespace LegacyVideos.Core.Implementations
             _movieDal = movieDal;
         }
 
+        /// <summary>
+        /// Add movie.
+        /// </summary>
+        /// <param name="movie"><see cref="Movie"/> to add.</param>
         public async Task<int> AddMovie(Movie movie)
         {
             try
@@ -38,6 +42,11 @@ namespace LegacyVideos.Core.Implementations
             }
         }
 
+        /// <summary>
+        /// Get movie by id.
+        /// </summary>
+        /// <param name="id">Id of movie to lookup.</param>
+        /// <returns><see cref="Movie"/></returns>
         public async Task<Movie> GetMovieById(int id)
         {
             try
@@ -57,6 +66,12 @@ namespace LegacyVideos.Core.Implementations
             }
         }
 
+
+        /// <summary>
+        /// Get movies by title.
+        /// </summary>
+        /// <param name="title">Title of movies to lookup.</param>
+        /// <returns><see cref="Movie"/>s</returns>
         public async Task<List<Movie>> GetMovieByTitle(string title)
         {
             try
@@ -76,6 +91,11 @@ namespace LegacyVideos.Core.Implementations
             }
         }
 
+        /// <summary>
+        /// Get movies that is owned or not.
+        /// </summary>
+        /// <param name="owned">Indicator to lookup owned movies.</param>
+        /// <returns><see cref="Movie"/>s</returns>
         public async Task<List<Movie>> GetMovieByOwned(bool owned)
         {
             try
@@ -95,6 +115,12 @@ namespace LegacyVideos.Core.Implementations
             }
         }
 
+        /// <summary>
+        /// Get movies by release date.
+        /// </summary>
+        /// <param name="fromDate">The from date to lookup movies from.</param>
+        /// <param name="toDate">The to date to lookup movies to.</param>
+        /// <returns><see cref="Movie"/>s</returns>
         public async Task<List<Movie>> GetMovieByReleaseDate(DateTime fromDate, DateTime toDate)
         {
             try
@@ -114,6 +140,10 @@ namespace LegacyVideos.Core.Implementations
             }
         }
 
+        /// <summary>
+        /// Update movie.
+        /// </summary>
+        /// <param name="movie"><see cref="Movie"/> to update.</param>
         public async Task UpdateMovie(Movie movie)
         {
             try
@@ -123,6 +153,27 @@ namespace LegacyVideos.Core.Implementations
                 await _movieDal.UpdateMovie(movie);
 
                 _logger.Debug($"Completed updating movie with id {movie.Id}.");
+            }
+            catch (Exception exception)
+            {
+                _logger.Error($"{exception.Message} - {exception.StackTrace}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Delete movie.
+        /// </summary>
+        /// <param name="id"><see cref="Movie"/> id to delete.</param>
+        public async Task DeleteMovie(int id)
+        {
+            try
+            {
+                _logger.Debug($"Start deleting movie with id: {id}.");
+
+                await _movieDal.DeleteMovie(id);
+
+                _logger.Debug($"Completed deleting movie with id {id}.");
             }
             catch (Exception exception)
             {

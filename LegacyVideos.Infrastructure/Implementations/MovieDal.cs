@@ -120,7 +120,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// <returns><see cref="Movie"/></returns>
         public async Task<Movie> GetMovieById(int id, SqlCommand sqlCommand)
         {
-            var movie = new Movie();
+            Movie movie = null;
 
             sqlCommand.CommandType = CommandType.StoredProcedure;
             sqlCommand.CommandText = "movies_get";
@@ -421,6 +421,52 @@ namespace LegacyVideos.Infrastructure.Implementations
             sqlCommand.Parameters.Add("@release_date", SqlDbType.DateTime).Value = movie.ReleaseDate;
             sqlCommand.Parameters.Add("@added_date", SqlDbType.DateTime).Value = movie.AddedDate;
             sqlCommand.Parameters.Add("@owned", SqlDbType.Bit).Value = movie.Owned;
+
+            await sqlCommand.ExecuteNonQueryAsync();
+        }
+
+        /// <summary>
+        /// Delete movie.
+        /// </summary>
+        /// <param name="id"><see cref="Movie"/> id to delete.</param>
+        public async Task DeleteMovie(int id)
+        {
+            await using var sqlConnection = new SqlConnection(_connectionString);
+            await sqlConnection.OpenAsync();
+            var sqlCommand = sqlConnection.CreateCommand();
+            var sqlTransaction = sqlConnection.BeginTransaction();
+            sqlCommand.Transaction = sqlTransaction;
+
+            try
+            {
+                _logger.Debug($"Start deleting movie with id: {id}.");
+
+                await DeleteMovie(id, sqlCommand);
+
+                await sqlTransaction.CommitAsync();
+
+                _logger.Debug($"Completed deleting movie with id {id}.");
+            }
+            catch (Exception exception)
+            {
+                _logger.Error($"{exception.Message} - {exception.StackTrace}");
+                await sqlTransaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Delete movie.
+        /// </summary>
+        /// <param name="id"><see cref="Movie"/> id to delete.</param>
+        /// <param name="sqlCommand">The SqlCommand to use when interacting with the database.</param>
+        public async Task DeleteMovie(int id, SqlCommand sqlCommand)
+        {
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.CommandText = "movies_del";
+            sqlCommand.Parameters.Clear();
+
+            sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
             await sqlCommand.ExecuteNonQueryAsync();
         }

@@ -229,6 +229,40 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             Assert.Equal(title, updatedMovie.Title);
         }
 
+        /// <summary>
+        /// Update a <see cref="Movie"/> and make sure it is updated correctly.
+        /// </summary>
+        [Fact]
+        public async Task DeleteMovie()
+        {
+            // Arrange
+            const int numberOfMovies = 15;
+
+            await using var sqlConnection = new SqlConnection(_commonHelper.Settings.Database.ConnectionString);
+            await sqlConnection.OpenAsync();
+            var sqlCommand = sqlConnection.CreateCommand();
+            var sqlTransaction = sqlConnection.BeginTransaction();
+            sqlCommand.Transaction = sqlTransaction;
+
+            var movie = await GetRandomMovieFromDatabase(sqlCommand, numberOfMovies);
+
+            Movie deleteMovie;
+
+            // Act
+            try
+            {
+                await _movieDal.DeleteMovie(movie.Id, sqlCommand);
+                deleteMovie = await _movieDal.GetMovieById(movie.Id, sqlCommand);
+            }
+            finally
+            {
+                await sqlTransaction.RollbackAsync();
+            }
+
+            // Assert
+            Assert.Null(deleteMovie);
+        }
+
         private static async Task AddMovieTypeToDatabase(SqlCommand sqlCommand)
         {
             sqlCommand.CommandType = CommandType.Text;

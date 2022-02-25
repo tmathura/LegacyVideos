@@ -34,7 +34,7 @@ BEGIN
            @owned          -- owned - bit
     ;
 
-    RETURN SCOPE_IDENTITY();
+    SELECT SCOPE_IDENTITY();
     
 END;
 GO

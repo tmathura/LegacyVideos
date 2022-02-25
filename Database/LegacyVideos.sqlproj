@@ -35,6 +35,7 @@
     <Provisioner>CustomScripts</Provisioner>
     <SyncOptionIncludeExistenceChecks>True</SyncOptionIncludeExistenceChecks>
     <SyncOptionUseDropCreateInsteadOfAlter>True</SyncOptionUseDropCreateInsteadOfAlter>
+    <IncludeObjectsInDataSync>Table=[dbo].[movie_type]</IncludeObjectsInDataSync>
   </PropertyGroup>
   <!-- SQL CHANGE AUTOMATION OFFLINE SCHEMA MODEL OPTIONS -->
   <PropertyGroup>

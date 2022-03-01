@@ -282,5 +282,72 @@ namespace LegacyVideos.WebApi.IntegrationTests.Controllers
             // Assert
             Assert.True(getMoviesByOwnedResponse.Count > 0);
         }
+
+        /// <summary>
+        /// Add a new movie, then get it by release date and validate that the movies were retrieved correctly.
+        /// </summary>
+        [Fact]
+        public async Task GetMoviesByReleaseDate()
+        {
+            // Arrange
+            const string title = "The Matrix";
+            const string description = "Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.";
+            const int movieType = 2;
+            const int duration = 136;
+            const string releaseDate = "1999-03-30";
+            const string addedDate = "2022-03-01";
+            const bool owned = true;
+
+            var movieRequest = new
+            {
+                title = title,
+                description = description,
+                movietype = movieType,
+                duration = duration,
+                releasedate = releaseDate,
+                addeddate = addedDate,
+                owned = owned
+            };
+
+            var response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, movieRequest);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic movieId = JsonConvert.DeserializeObject(response.Content);
+            Assert.NotNull(movieId);
+
+            // Act
+            var endPointParams = new Dictionary<string, string>
+            {
+                {"fromDate", "1999-01-01T00:00:00.0000000"},
+                {"toDate", "2005-01-01T00:00:00.0000000"},
+
+            };
+
+            response = await _commonHelper.CallEndPoint("api/movies/getmoviesbyreleasedate", endPointParams, Method.Get, null);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic getMoviesByReleaseDateResponse = JsonConvert.DeserializeObject(response.Content);
+
+            // Assert
+            Assert.True(getMoviesByReleaseDateResponse.Count > 0);
+        }
+
+        /// <summary>
+        /// Get a movie by a release date that does not exist and validate that the response is no content.
+        /// </summary>
+        [Fact]
+        public async Task GetMoviesByReleaseDate_Invalid_ReleaseDate()
+        {
+            // Act
+            var endPointParams = new Dictionary<string, string>
+            {
+                {"fromDate", "2000-01-01T00:00:00.0000000"},
+                {"toDate", "2005-01-01T00:00:00.0000000"},
+
+            };
+
+            var response = await _commonHelper.CallEndPoint("api/movies/getmoviesbyreleasedate", endPointParams, Method.Get, null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
     }
 }

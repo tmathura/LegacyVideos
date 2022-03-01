@@ -186,5 +186,49 @@ namespace LegacyVideos.WebApi.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
             }
         }
+
+        /// <summary>
+        /// Get movies by release date.
+        /// </summary>
+        /// <param name="fromDate">The from date to search by.</param>
+        /// <param name="toDate">The to date to search by.</param>
+        /// <returns>List of <see cref="Movie"/>s</returns>
+        /// <exception cref="HttpResponseException"></exception>
+        [HttpGet]
+        [Route("getmoviesbyreleasedate")]
+        public async Task<List<GetMoviesByReleaseDateResponse>> GetMoviesByReleaseDate(DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                _logger.Debug($"Start getting movies by from date: {fromDate} and to date {toDate}.");
+
+                List<GetMoviesByReleaseDateResponse>? getMoviesByReleaseDateResponse = null;
+
+                var movies = await _movieBl.GetMoviesByReleaseDate(fromDate, toDate);
+
+                if (movies != null && movies.Count > 0)
+                {
+                    getMoviesByReleaseDateResponse = movies.Select(movie => new GetMoviesByReleaseDateResponse
+                    {
+                        Id = movie.Id,
+                        Title = movie.Title,
+                        Description = movie.Description,
+                        MovieType = movie.MovieType,
+                        Duration = movie.Duration,
+                        ReleaseDate = movie.ReleaseDate,
+                        AddedDate = movie.AddedDate,
+                        Owned = movie.Owned
+                    }).ToList();
+                }
+
+                _logger.Info($"Completed getting movies by from date: {fromDate} and to date {toDate}.");
+
+                return getMoviesByReleaseDateResponse;
+            }
+            catch (Exception exception)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
+            }
+        }
     }
 }

@@ -303,7 +303,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// <param name="fromDate">The from date to lookup movies from.</param>
         /// <param name="toDate">The to date to lookup movies to.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByReleaseDate(DateTime fromDate, DateTime toDate)
+        public async Task<List<Movie>> GetMoviesByReleaseDate(DateTime fromDate, DateTime toDate)
         {
             List<Movie> movies;
 
@@ -317,7 +317,7 @@ namespace LegacyVideos.Infrastructure.Implementations
             {
                 _logger.Debug($"Getting movies by from date: {fromDate} and to date {toDate}.");
 
-                movies = await GetMovieByReleaseDate(fromDate, toDate, sqlCommand);
+                movies = await GetMoviesByReleaseDate(fromDate, toDate, sqlCommand);
 
                 await sqlTransaction.CommitAsync();
 
@@ -340,7 +340,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// <param name="toDate">The to date to lookup movies to.</param>
         /// <param name="sqlCommand">The SqlCommand to use when interacting with the database.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByReleaseDate(DateTime fromDate, DateTime toDate, SqlCommand sqlCommand)
+        public async Task<List<Movie>> GetMoviesByReleaseDate(DateTime fromDate, DateTime toDate, SqlCommand sqlCommand)
         {
             var movies = new List<Movie>();
 

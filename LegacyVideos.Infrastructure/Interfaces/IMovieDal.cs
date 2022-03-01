@@ -37,7 +37,7 @@ namespace LegacyVideos.Infrastructure.Interfaces
         /// <param name="fromDate">The from date to lookup movies from.</param>
         /// <param name="toDate">The to date to lookup movies to.</param>
         /// <returns><see cref="Movie"/></returns>
-        Task<List<Movie>> GetMovieByReleaseDate(DateTime fromDate, DateTime toDate);
+        Task<List<Movie>> GetMoviesByReleaseDate(DateTime fromDate, DateTime toDate);
 
         /// <summary>
         /// Update movie.

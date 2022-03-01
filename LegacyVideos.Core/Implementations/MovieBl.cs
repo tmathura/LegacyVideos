@@ -121,13 +121,13 @@ namespace LegacyVideos.Core.Implementations
         /// <param name="fromDate">The from date to lookup movies from.</param>
         /// <param name="toDate">The to date to lookup movies to.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByReleaseDate(DateTime fromDate, DateTime toDate)
+        public async Task<List<Movie>> GetMoviesByReleaseDate(DateTime fromDate, DateTime toDate)
         {
             try
             {
                 _logger.Debug($"Getting movies by from date: {fromDate} and to date {toDate}.");
 
-                var movies = await _movieDal.GetMovieByReleaseDate(fromDate, toDate);
+                var movies = await _movieDal.GetMoviesByReleaseDate(fromDate, toDate);
 
                 _logger.Debug($"Completed getting movies by from date: {fromDate} and to date {toDate}.");
 

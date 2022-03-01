@@ -163,7 +163,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
         /// Get <see cref="Movie"/>s by release date and see that a range of <see cref="Movie"/>s are returned.
         /// </summary>
         [Fact]
-        public async Task GetMovieByReleaseDate()
+        public async Task GetMoviesByReleaseDate()
         {
             // Arrange
             List<Movie> movies;
@@ -182,7 +182,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             // Act
             try
             {
-                movies = await _movieDal.GetMovieByReleaseDate(fromDate, toDate, sqlCommand);
+                movies = await _movieDal.GetMoviesByReleaseDate(fromDate, toDate, sqlCommand);
             }
             finally
             {

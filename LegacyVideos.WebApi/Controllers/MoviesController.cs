@@ -54,7 +54,6 @@ namespace LegacyVideos.WebApi.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        [Route("")]
         public async Task<GetMovieByIdResponse> GetMovieById(int id)
         {
             try

@@ -266,5 +266,29 @@ namespace LegacyVideos.WebApi.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
             }
         }
+
+        /// <summary>
+        /// Delete movie.
+        /// </summary>
+        /// <param name="id"><see cref="Movie"/> id to delete.</param>
+        /// <returns>Movie Id</returns>
+        /// <exception cref="HttpResponseException"></exception>
+        [HttpDelete]
+        [Route("")]
+        public async Task DeleteMovie(int id)
+        {
+            try
+            {
+                _logger.Debug($"Start deleting movie {id}.");
+                
+                await _movieBl.DeleteMovie(id);
+
+                _logger.Info($"Completed deleting movie with movie id: {id}.");
+            }
+            catch (Exception exception)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
+            }
+        }
     }
 }

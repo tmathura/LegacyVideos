@@ -24,31 +24,31 @@ namespace LegacyVideos.WebApi.Controllers
         /// <summary>
         /// Add movie.
         /// </summary>
-        /// <param name="movieRequest">The <see cref="Movie"/> to create.</param>
+        /// <param name="addMovieRequest">The <see cref="Movie"/> to create.</param>
         /// <returns>Movie Id</returns>
         /// <exception cref="HttpResponseException"></exception>
         [HttpPost]
         [Route("")]
-        public async Task<int> AddMovie(AddMovieRequest movieRequest)
+        public async Task<int> AddMovie(AddMovieRequest addMovieRequest)
         {
             try
             {
-                _logger.Debug($"Start adding movie {movieRequest.Title}.");
+                _logger.Debug($"Start adding movie {addMovieRequest.Title}.");
 
                 var movie = new Movie
                 {
-                    Title = movieRequest.Title,
-                    Description = movieRequest.Description,
-                    MovieType = movieRequest.MovieType,
-                    Duration = movieRequest.Duration,
-                    ReleaseDate = movieRequest.ReleaseDate,
-                    AddedDate = movieRequest.AddedDate,
-                    Owned = movieRequest.Owned
+                    Title = addMovieRequest.Title,
+                    Description = addMovieRequest.Description,
+                    MovieType = addMovieRequest.MovieType,
+                    Duration = addMovieRequest.Duration,
+                    ReleaseDate = addMovieRequest.ReleaseDate,
+                    AddedDate = addMovieRequest.AddedDate,
+                    Owned = addMovieRequest.Owned
                 };
 
                 var id = await _movieBl.AddMovie(movie);
 
-                _logger.Info($"Completed adding movie for movie {movieRequest.Title} with movie id: {id}.");
+                _logger.Info($"Completed adding movie for movie {addMovieRequest.Title} with movie id: {id}.");
 
                 return id;
             }
@@ -224,6 +224,42 @@ namespace LegacyVideos.WebApi.Controllers
                 _logger.Info($"Completed getting movies by from date: {fromDate} and to date {toDate}.");
 
                 return getMoviesByReleaseDateResponse;
+            }
+            catch (Exception exception)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Update movie.
+        /// </summary>
+        /// <param name="updateMovieRequest">The <see cref="Movie"/> to update.</param>
+        /// <returns>Movie Id</returns>
+        /// <exception cref="HttpResponseException"></exception>
+        [HttpPut]
+        [Route("")]
+        public async Task UpdateMovie(UpdateMovieRequest updateMovieRequest)
+        {
+            try
+            {
+                _logger.Debug($"Start updating movie {updateMovieRequest.Title}.");
+
+                var movie = new Movie
+                {
+                    Id = updateMovieRequest.Id,
+                    Title = updateMovieRequest.Title,
+                    Description = updateMovieRequest.Description,
+                    MovieType = updateMovieRequest.MovieType,
+                    Duration = updateMovieRequest.Duration,
+                    ReleaseDate = updateMovieRequest.ReleaseDate,
+                    AddedDate = updateMovieRequest.AddedDate,
+                    Owned = updateMovieRequest.Owned
+                };
+
+                await _movieBl.UpdateMovie(movie);
+
+                _logger.Info($"Completed updating movie for movie {updateMovieRequest.Title} with movie id: {updateMovieRequest.Id}.");
             }
             catch (Exception exception)
             {

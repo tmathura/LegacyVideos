@@ -154,7 +154,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// </summary>
         /// <param name="title">Title of movies to lookup.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByTitle(string title)
+        public async Task<List<Movie>> GetMoviesByTitle(string title)
         {
             List<Movie> movies;
 
@@ -168,7 +168,7 @@ namespace LegacyVideos.Infrastructure.Implementations
             {
                 _logger.Debug($"Getting movies by title: {title}.");
 
-                movies = await GetMovieByTitle(title, sqlCommand);
+                movies = await GetMoviesByTitle(title, sqlCommand);
 
                 await sqlTransaction.CommitAsync();
 
@@ -190,7 +190,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// <param name="title">Title of movies to lookup.</param>
         /// <param name="sqlCommand">The SqlCommand to use when interacting with the database.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByTitle(string title, SqlCommand sqlCommand)
+        public async Task<List<Movie>> GetMoviesByTitle(string title, SqlCommand sqlCommand)
         {
             var movies = new List<Movie>();
 
@@ -228,7 +228,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// </summary>
         /// <param name="owned">Indicator to lookup owned movies.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByOwned(bool owned)
+        public async Task<List<Movie>> GetMoviesByOwned(bool owned)
         {
             List<Movie> movies;
 
@@ -242,7 +242,7 @@ namespace LegacyVideos.Infrastructure.Implementations
             {
                 _logger.Debug($"Getting movies by owned: {owned}.");
 
-                movies = await GetMovieByOwned(owned, sqlCommand);
+                movies = await GetMoviesByOwned(owned, sqlCommand);
 
                 await sqlTransaction.CommitAsync();
 
@@ -264,7 +264,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// <param name="owned">Indicator to lookup owned movies.</param>
         /// <param name="sqlCommand">The SqlCommand to use when interacting with the database.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByOwned(bool owned, SqlCommand sqlCommand)
+        public async Task<List<Movie>> GetMoviesByOwned(bool owned, SqlCommand sqlCommand)
         {
             var movies = new List<Movie>();
 

@@ -21,6 +21,12 @@ namespace LegacyVideos.WebApi.Controllers
             _movieBl = movieBl;
         }
 
+        /// <summary>
+        /// Add movie.
+        /// </summary>
+        /// <param name="movieRequest">The <see cref="Movie"/> to create.</param>
+        /// <returns>Movie Id</returns>
+        /// <exception cref="HttpResponseException"></exception>
         [HttpPost]
         [Route("")]
         public async Task<int> AddMovie(AddMovieRequest movieRequest)
@@ -52,13 +58,19 @@ namespace LegacyVideos.WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Get movie by id.
+        /// </summary>
+        /// <param name="id">The <see cref="Movie"/> id.</param>
+        /// <returns><see cref="Movie"/></returns>
+        /// <exception cref="HttpResponseException"></exception>
         [HttpGet]
         [Route("{id}")]
         public async Task<GetMovieByIdResponse> GetMovieById(int id)
         {
             try
             {
-                _logger.Debug($"Start getting movie by id {id}.");
+                _logger.Debug($"Start getting movie by id: {id}.");
 
                 GetMovieByIdResponse? getMovieByIdResponse = null;
 
@@ -79,9 +91,95 @@ namespace LegacyVideos.WebApi.Controllers
                     };
                 }
 
-                _logger.Info($"Completed getting movie by id {id}.");
+                _logger.Info($"Completed getting movie by id: {id}.");
 
                 return getMovieByIdResponse;
+            }
+            catch (Exception exception)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get movies by title.
+        /// </summary>
+        /// <param name="title">The title to search by.</param>
+        /// <returns>List of <see cref="Movie"/>s</returns>
+        /// <exception cref="HttpResponseException"></exception>
+        [HttpGet]
+        [Route("getmoviesbytitle")]
+        public async Task<List<GetMovieByTitleResponse>> GetMoviesByTitle(string title)
+        {
+            try
+            {
+                _logger.Debug($"Start getting movies by title {title}.");
+
+                List<GetMovieByTitleResponse>? getMovieByTitleResponse = null;
+
+                var movies = await _movieBl.GetMoviesByTitle(title);
+
+                if (movies != null && movies.Count > 0)
+                {
+                    getMovieByTitleResponse = movies.Select(movie => new GetMovieByTitleResponse
+                    {
+                        Id = movie.Id,
+                        Title = movie.Title,
+                        Description = movie.Description,
+                        MovieType = movie.MovieType,
+                        Duration = movie.Duration,
+                        ReleaseDate = movie.ReleaseDate,
+                        AddedDate = movie.AddedDate,
+                        Owned = movie.Owned
+                    }).ToList();
+                }
+
+                _logger.Info($"Completed getting movies by title {title}.");
+
+                return getMovieByTitleResponse;
+            }
+            catch (Exception exception)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get movies by owned.
+        /// </summary>
+        /// <param name="owned">The owned bool to search by.</param>
+        /// <returns>List of <see cref="Movie"/>s</returns>
+        /// <exception cref="HttpResponseException"></exception>
+        [HttpGet]
+        [Route("getmoviesbyowned")]
+        public async Task<List<GetMovieByOwnedResponse>> GetMoviesByOwned(bool owned)
+        {
+            try
+            {
+                _logger.Debug($"Start getting movies by owned {owned}.");
+
+                List<GetMovieByOwnedResponse>? getMovieByOwnedResponse = null;
+
+                var movies = await _movieBl.GetMoviesByOwned(owned);
+
+                if (movies != null && movies.Count > 0)
+                {
+                    getMovieByOwnedResponse = movies.Select(movie => new GetMovieByOwnedResponse
+                    {
+                        Id = movie.Id,
+                        Title = movie.Title,
+                        Description = movie.Description,
+                        MovieType = movie.MovieType,
+                        Duration = movie.Duration,
+                        ReleaseDate = movie.ReleaseDate,
+                        AddedDate = movie.AddedDate,
+                        Owned = movie.Owned
+                    }).ToList();
+                }
+
+                _logger.Info($"Completed getting movies by owned {owned}.");
+
+                return getMovieByOwnedResponse;
             }
             catch (Exception exception)
             {

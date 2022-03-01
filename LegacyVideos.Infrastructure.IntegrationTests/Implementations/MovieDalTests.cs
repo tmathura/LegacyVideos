@@ -98,7 +98,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
         /// Get all <see cref="Movie"/>s by title.
         /// </summary>
         [Fact]
-        public async Task GetMovieByTitle()
+        public async Task GetMoviesByTitle()
         {
             // Arrange
             List<Movie> movies;
@@ -115,7 +115,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             // Act
             try
             {
-                movies = await _movieDal.GetMovieByTitle(title, sqlCommand);
+                movies = await _movieDal.GetMoviesByTitle(title, sqlCommand);
             }
             finally
             {
@@ -130,7 +130,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
         /// Get all <see cref="Movie"/>s that are owned.
         /// </summary>
         [Fact]
-        public async Task GetMovieByOwned()
+        public async Task GetMoviesByOwned()
         {
             // Arrange
             List<Movie> movies;
@@ -148,7 +148,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             // Act
             try
             {
-                movies = await _movieDal.GetMovieByOwned(owned, sqlCommand);
+                movies = await _movieDal.GetMoviesByOwned(owned, sqlCommand);
             }
             finally
             {
@@ -299,7 +299,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
         {
             await AddMovieToDatabase(sqlCommand, numberOfMovies);
 
-            var movies = await _movieDal.GetMovieByOwned(true, sqlCommand);
+            var movies = await _movieDal.GetMoviesByOwned(true, sqlCommand);
             var random = new Random();
             return movies[random.Next(movies.Count)];
         }

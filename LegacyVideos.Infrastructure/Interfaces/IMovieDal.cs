@@ -22,14 +22,14 @@ namespace LegacyVideos.Infrastructure.Interfaces
         /// </summary>
         /// <param name="title">Title of movies to lookup.</param>
         /// <returns><see cref="Movie"/></returns>
-        Task<List<Movie>> GetMovieByTitle(string title);
+        Task<List<Movie>> GetMoviesByTitle(string title);
 
         /// <summary>
         /// Get movies that is owned or not.
         /// </summary>
         /// <param name="owned">Indicator to lookup owned movies.</param>
         /// <returns><see cref="Movie"/></returns>
-        Task<List<Movie>> GetMovieByOwned(bool owned);
+        Task<List<Movie>> GetMoviesByOwned(bool owned);
 
         /// <summary>
         /// Get movies by release date.

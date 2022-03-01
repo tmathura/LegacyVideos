@@ -1,6 +1,7 @@
 ﻿using LegacyVideos.WebApi.IntegrationTests.Common.AppSettings;
 using Microsoft.Extensions.Configuration;
 using RestSharp;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit.Abstractions;
 
@@ -25,8 +26,18 @@ namespace LegacyVideos.WebApi.IntegrationTests.Common.Helpers
             Database = new DatabaseDriver(Settings.Database.ConnectionString);
         }
 
-        public async Task<RestResponse> CallEndPoint(string endPoint, Method method, object requestBody)
+        public async Task<RestResponse> CallEndPoint(string endPoint, Dictionary<string, string> endPointParams, Method method, object requestBody)
         {
+            if (endPointParams != null && endPointParams.Count > 0)
+            {
+                endPoint = $"{endPoint}?";
+                foreach (var (key, value) in endPointParams)
+                {
+                    endPoint = $"{endPoint}{key}={value}&";
+                }
+                endPoint = endPoint.Remove(endPoint.Length - 1);
+            }
+
             var request = new RestRequest(endPoint, method);
 
             if (requestBody != null)

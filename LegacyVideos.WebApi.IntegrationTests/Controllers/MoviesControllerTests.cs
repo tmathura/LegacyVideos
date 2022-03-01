@@ -2,6 +2,7 @@ using LegacyVideos.WebApi.IntegrationTests.Common.Helpers;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
@@ -47,7 +48,7 @@ namespace LegacyVideos.WebApi.IntegrationTests.Controllers
             };
 
             // Act
-            var response = await _commonHelper.CallEndPoint("api/movies", Method.Post, movieRequest);
+            var response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, movieRequest);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             dynamic movieId = JsonConvert.DeserializeObject(response.Content);
 
@@ -96,7 +97,7 @@ namespace LegacyVideos.WebApi.IntegrationTests.Controllers
             };
 
             // Act
-            var response = await _commonHelper.CallEndPoint("api/movies", Method.Post, movieRequest);
+            var response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, movieRequest);
 
             // Assert
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
@@ -128,13 +129,13 @@ namespace LegacyVideos.WebApi.IntegrationTests.Controllers
                 owned = owned
             };
 
-            var response = await _commonHelper.CallEndPoint("api/movies", Method.Post, movieRequest);
+            var response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, movieRequest);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             dynamic movieId = JsonConvert.DeserializeObject(response.Content);
             Assert.NotNull(movieId);
 
             // Act
-            response = await _commonHelper.CallEndPoint($"api/movies/{movieId}", Method.Get, null);
+            response = await _commonHelper.CallEndPoint($"api/movies/{movieId}", null, Method.Get, null);
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             dynamic getMovieByIdResponse = JsonConvert.DeserializeObject(response.Content);
 
@@ -165,10 +166,121 @@ namespace LegacyVideos.WebApi.IntegrationTests.Controllers
             const int movieId = 55;
 
             // Act
-            var response = await _commonHelper.CallEndPoint($"api/movies/{movieId}", Method.Get, null);
+            var response = await _commonHelper.CallEndPoint($"api/movies/{movieId}", null, Method.Get, null);
 
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Add a new movie, then get it by title and validate that the movies were retrieved correctly.
+        /// </summary>
+        [Fact]
+        public async Task GetMoviesByTitle()
+        {
+            // Arrange
+            const string title = "The Matrix";
+            const string description = "Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.";
+            const int movieType = 2;
+            const int duration = 136;
+            const string releaseDate = "1999-03-30";
+            const string addedDate = "2022-03-01";
+            const bool owned = true;
+
+            var movieRequest = new
+            {
+                title = title,
+                description = description,
+                movietype = movieType,
+                duration = duration,
+                releasedate = releaseDate,
+                addeddate = addedDate,
+                owned = owned
+            };
+
+            var response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, movieRequest);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic movieId = JsonConvert.DeserializeObject(response.Content);
+            Assert.NotNull(movieId);
+
+            // Act
+            var endPointParams = new Dictionary<string, string>
+            {
+                {"title", title}
+            };
+
+            response = await _commonHelper.CallEndPoint("api/movies/getmoviesbytitle", endPointParams, Method.Get, null);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic getMoviesByTitleResponse = JsonConvert.DeserializeObject(response.Content);
+
+            // Assert
+            Assert.True(getMoviesByTitleResponse.Count > 0);
+        }
+
+        /// <summary>
+        /// Get a movie by a title that does not exist and validate that the response is no content.
+        /// </summary>
+        [Fact]
+        public async Task GetMoviesByTitle_Invalid_Title()
+        {
+            // Arrange
+            const string title = "Super Fake Title";
+
+            // Act
+            var endPointParams = new Dictionary<string, string>
+            {
+                {"title", title}
+            };
+
+            var response = await _commonHelper.CallEndPoint("api/movies/getmoviesbytitle", endPointParams, Method.Get, null);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Add a new movie, then get it by owned and validate that the movies were retrieved correctly.
+        /// </summary>
+        [Fact]
+        public async Task GetMoviesByOwned()
+        {
+            // Arrange
+            const string title = "The Matrix";
+            const string description = "Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.";
+            const int movieType = 2;
+            const int duration = 136;
+            const string releaseDate = "1999-03-30";
+            const string addedDate = "2022-03-01";
+            const bool owned = true;
+
+            var movieRequest = new
+            {
+                title = title,
+                description = description,
+                movietype = movieType,
+                duration = duration,
+                releasedate = releaseDate,
+                addeddate = addedDate,
+                owned = owned
+            };
+
+            var response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, movieRequest);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic movieId = JsonConvert.DeserializeObject(response.Content);
+            Assert.NotNull(movieId);
+
+            // Act
+            var endPointParams = new Dictionary<string, string>
+            {
+                {"owned", owned.ToString()}
+            };
+
+            response = await _commonHelper.CallEndPoint("api/movies/getmoviesbyowned", endPointParams, Method.Get, null);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic getMoviesByOwnedResponse = JsonConvert.DeserializeObject(response.Content);
+
+            // Assert
+            Assert.True(getMoviesByOwnedResponse.Count > 0);
         }
     }
 }

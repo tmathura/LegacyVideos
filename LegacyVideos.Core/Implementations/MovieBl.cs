@@ -72,13 +72,13 @@ namespace LegacyVideos.Core.Implementations
         /// </summary>
         /// <param name="title">Title of movies to lookup.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByTitle(string title)
+        public async Task<List<Movie>> GetMoviesByTitle(string title)
         {
             try
             {
                 _logger.Debug($"Getting movies by title: {title}.");
 
-                var movies = await _movieDal.GetMovieByTitle(title);
+                var movies = await _movieDal.GetMoviesByTitle(title);
 
                 _logger.Debug($"Completed getting movies by title: {title}.");
 
@@ -96,13 +96,13 @@ namespace LegacyVideos.Core.Implementations
         /// </summary>
         /// <param name="owned">Indicator to lookup owned movies.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMovieByOwned(bool owned)
+        public async Task<List<Movie>> GetMoviesByOwned(bool owned)
         {
             try
             {
                 _logger.Debug($"Getting movies by owned: {owned}.");
 
-                var movies = await _movieDal.GetMovieByOwned(owned);
+                var movies = await _movieDal.GetMoviesByOwned(owned);
 
                 _logger.Debug($"Completed getting movies by owned: {owned}.");
 

@@ -1,8 +1,8 @@
 ﻿using LegacyVideos.Domain.Enums;
 
-namespace LegacyVideos.Domain.Models
+namespace LegacyVideos.Domain.Requests
 {
-    public class MovieRequest
+    public class AddMovieRequest
     {
         /// <summary>
         /// The title of the movie.

@@ -83,7 +83,8 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             // Act
             try
             {
-                movie = await _movieDal.GetMovieById(randomMovie.Id, sqlCommand);
+                var movies = await _movieDal.GetMovies(randomMovie.Id, null, null, sqlCommand);
+                movie = movies.FirstOrDefault();
             }
             finally
             {
@@ -115,7 +116,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             // Act
             try
             {
-                movies = await _movieDal.GetMoviesByTitle(title, sqlCommand);
+                movies = await _movieDal.GetMovies(null, title, null, sqlCommand);
             }
             finally
             {
@@ -148,7 +149,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             // Act
             try
             {
-                movies = await _movieDal.GetMoviesByOwned(owned, sqlCommand);
+                movies = await _movieDal.GetMovies(null, null, owned, sqlCommand);
             }
             finally
             {
@@ -218,7 +219,8 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             try
             {
                 await _movieDal.UpdateMovie(movie, sqlCommand);
-                updatedMovie = await _movieDal.GetMovieById(movie.Id, sqlCommand);
+                var movies = await _movieDal.GetMovies(movie.Id, null, null, sqlCommand);
+                updatedMovie = movies.FirstOrDefault();
             }
             finally
             {
@@ -252,7 +254,8 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
             try
             {
                 await _movieDal.DeleteMovie(movie.Id, sqlCommand);
-                deleteMovie = await _movieDal.GetMovieById(movie.Id, sqlCommand);
+                var movies = await _movieDal.GetMovies(movie.Id, null, null, sqlCommand);
+                deleteMovie = movies.FirstOrDefault();
             }
             finally
             {
@@ -299,7 +302,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
         {
             await AddMovieToDatabase(sqlCommand, numberOfMovies);
 
-            var movies = await _movieDal.GetMoviesByOwned(true, sqlCommand);
+            var movies = await _movieDal.GetMovies(null, null, true, sqlCommand);
             var random = new Random();
             return movies[random.Next(movies.Count)];
         }

@@ -1,9 +1,10 @@
 ﻿using LegacyVideos.Domain.Enums;
 using LegacyVideos.Domain.Models;
+using LegacyVideos.Infrastructure.Extensions;
 using LegacyVideos.Infrastructure.Interfaces;
+using log4net;
 using System.Data;
 using System.Data.SqlClient;
-using log4net;
 
 namespace LegacyVideos.Infrastructure.Implementations
 {
@@ -84,7 +85,7 @@ namespace LegacyVideos.Infrastructure.Implementations
         /// <returns><see cref="Movie"/></returns>
         public async Task<Movie> GetMovieById(int id)
         {
-            Movie movies;
+            Movie movie;
 
             await using var sqlConnection = new SqlConnection(_connectionString);
             await sqlConnection.OpenAsync();
@@ -96,7 +97,8 @@ namespace LegacyVideos.Infrastructure.Implementations
             {
                 _logger.Debug($"Getting movie by movie id: {id}.");
 
-                movies = await GetMovieById(id, sqlCommand);
+                var movies = await GetMovies(id, null, null, sqlCommand);
+                movie = movies.FirstOrDefault();
 
                 await sqlTransaction.CommitAsync();
 
@@ -107,43 +109,6 @@ namespace LegacyVideos.Infrastructure.Implementations
                 _logger.Error($"{exception.Message} - {exception.StackTrace}");
                 await sqlTransaction.RollbackAsync();
                 throw;
-            }
-
-            return movies;
-        }
-
-        /// <summary>
-        /// Get movie by id.
-        /// </summary>
-        /// <param name="id">Id of movie to lookup.</param>
-        /// <param name="sqlCommand">The SqlCommand to use when interacting with the database.</param>
-        /// <returns><see cref="Movie"/></returns>
-        public async Task<Movie> GetMovieById(int id, SqlCommand sqlCommand)
-        {
-            Movie movie = null;
-
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "movies_get";
-            sqlCommand.Parameters.Clear();
-
-            sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
-            sqlCommand.Parameters.Add("@title", SqlDbType.VarChar, 200).Value = DBNull.Value;
-            sqlCommand.Parameters.Add("@owned", SqlDbType.Bit).Value = DBNull.Value;
-
-            await using var sqlDataReader = await sqlCommand.ExecuteReaderAsync();
-            while (await sqlDataReader.ReadAsync())
-            {
-                movie = new Movie
-                {
-                    Id = Convert.ToInt32(sqlDataReader["id"]),
-                    Title = Convert.ToString(sqlDataReader["title"]),
-                    Description = Convert.ToString(sqlDataReader["description"]),
-                    MovieType = (MovieType)Convert.ToInt32(sqlDataReader["movie_type_id"]),
-                    Duration = Convert.ToInt32(sqlDataReader["duration"]),
-                    ReleaseDate = Convert.ToDateTime(sqlDataReader["release_date"]),
-                    AddedDate = Convert.ToDateTime(sqlDataReader["added_date"]),
-                    Owned = Convert.ToBoolean(sqlDataReader["owned"])
-                };
             }
 
             return movie;
@@ -168,7 +133,7 @@ namespace LegacyVideos.Infrastructure.Implementations
             {
                 _logger.Debug($"Getting movies by title: {title}.");
 
-                movies = await GetMoviesByTitle(title, sqlCommand);
+                movies = await GetMovies(null, title, null, sqlCommand);
 
                 await sqlTransaction.CommitAsync();
 
@@ -179,45 +144,6 @@ namespace LegacyVideos.Infrastructure.Implementations
                 _logger.Error($"{exception.Message} - {exception.StackTrace}");
                 await sqlTransaction.RollbackAsync();
                 throw;
-            }
-
-            return movies;
-        }
-
-        /// <summary>
-        /// Get movies by title.
-        /// </summary>
-        /// <param name="title">Title of movies to lookup.</param>
-        /// <param name="sqlCommand">The SqlCommand to use when interacting with the database.</param>
-        /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMoviesByTitle(string title, SqlCommand sqlCommand)
-        {
-            var movies = new List<Movie>();
-
-            sqlCommand.CommandType = CommandType.StoredProcedure;
-            sqlCommand.CommandText = "movies_get";
-            sqlCommand.Parameters.Clear();
-
-            sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = DBNull.Value;
-            sqlCommand.Parameters.Add("@title", SqlDbType.VarChar, 200).Value = title;
-            sqlCommand.Parameters.Add("@owned", SqlDbType.Bit).Value = DBNull.Value;
-
-            await using var sqlDataReader = await sqlCommand.ExecuteReaderAsync();
-            while (await sqlDataReader.ReadAsync())
-            {
-                var movie = new Movie
-                {
-                    Id = Convert.ToInt32(sqlDataReader["id"]),
-                    Title = Convert.ToString(sqlDataReader["title"]),
-                    Description = Convert.ToString(sqlDataReader["description"]),
-                    MovieType = (MovieType)Convert.ToInt32(sqlDataReader["movie_type_id"]),
-                    Duration = Convert.ToInt32(sqlDataReader["duration"]),
-                    ReleaseDate = Convert.ToDateTime(sqlDataReader["release_date"]),
-                    AddedDate = Convert.ToDateTime(sqlDataReader["added_date"]),
-                    Owned = Convert.ToBoolean(sqlDataReader["owned"])
-                };
-
-                movies.Add(movie);
             }
 
             return movies;
@@ -242,7 +168,7 @@ namespace LegacyVideos.Infrastructure.Implementations
             {
                 _logger.Debug($"Getting movies by owned: {owned}.");
 
-                movies = await GetMoviesByOwned(owned, sqlCommand);
+                movies = await GetMovies(null, null, owned, sqlCommand);
 
                 await sqlTransaction.CommitAsync();
 
@@ -259,12 +185,14 @@ namespace LegacyVideos.Infrastructure.Implementations
         }
 
         /// <summary>
-        /// Get movies that is owned or not.
+        /// Get movies.
         /// </summary>
+        /// <param name="id">Id of movie to lookup.</param>
+        /// <param name="title">Title of movies to lookup.</param>
         /// <param name="owned">Indicator to lookup owned movies.</param>
         /// <param name="sqlCommand">The SqlCommand to use when interacting with the database.</param>
         /// <returns><see cref="Movie"/>s</returns>
-        public async Task<List<Movie>> GetMoviesByOwned(bool owned, SqlCommand sqlCommand)
+        public async Task<List<Movie>> GetMovies(int? id, string? title, bool? owned, SqlCommand sqlCommand)
         {
             var movies = new List<Movie>();
 
@@ -272,9 +200,9 @@ namespace LegacyVideos.Infrastructure.Implementations
             sqlCommand.CommandText = "movies_get";
             sqlCommand.Parameters.Clear();
 
-            sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = DBNull.Value;
-            sqlCommand.Parameters.Add("@title", SqlDbType.VarChar, 200).Value = DBNull.Value;
-            sqlCommand.Parameters.Add("@owned", SqlDbType.Bit).Value = owned;
+            sqlCommand.Parameters.Add("@id", SqlDbType.Int).Value = id.ToSqlNull();
+            sqlCommand.Parameters.Add("@title", SqlDbType.VarChar, 200).Value = title.ToSqlNull();
+            sqlCommand.Parameters.Add("@owned", SqlDbType.Bit).Value = owned.ToSqlNull();
 
             await using var sqlDataReader = await sqlCommand.ExecuteReaderAsync();
             while (await sqlDataReader.ReadAsync())

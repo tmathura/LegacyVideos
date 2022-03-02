@@ -88,6 +88,13 @@ namespace LegacyVideos.WebApp.Controllers
             return View("UpdatedMovieSuccess");
         }
 
+        public async Task<IActionResult> DeleteMovie(int id)
+        {
+            await _webAppClient.Movies.DeleteMovie(id);
+
+            return View("DeleteMovieSuccess");
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

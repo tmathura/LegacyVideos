@@ -14,6 +14,28 @@
 						<h5 class="card-title">@movie.Title</h5>
 						<p class="card-text">@movie.Description</p>
 						@Html.ActionLink(linkText: "Update",  actionName: "UpdateMovie",  routeValues: new { id = movie.Id }, htmlAttributes: new { @class = "btn btn-dark btn-sm" })
+						<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target=@($"#modal_{movie.Id}")>
+							Delete
+						</button>
+
+						<!-- Modal -->
+						<div class="modal fade" id=@($"modal_{movie.Id}") tabindex="-1" aria-labelledby=@($"modal_label_{movie.Id}") aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id=@($"modal_label_{movie.Id}")>Delete movie?</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body">
+										Do you want to delete the movie '@(movie.Title)'?
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button>
+										@Html.ActionLink(linkText: "Yes",  actionName: "DeleteMovie",  routeValues: new { id = movie.Id }, htmlAttributes: new { @class = "btn btn-danger" })
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

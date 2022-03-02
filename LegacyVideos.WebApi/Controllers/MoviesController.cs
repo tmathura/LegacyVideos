@@ -59,6 +59,48 @@ namespace LegacyVideos.WebApi.Controllers
         }
 
         /// <summary>
+        /// Get all movies.
+        /// </summary>
+        /// <returns>List of <see cref="Movie"/>s</returns>
+        /// <exception cref="HttpResponseException"></exception>
+        [HttpGet]
+        [Route("")]
+        public async Task<List<GetAllMoviesResponse>> GetAllMovies()
+        {
+            try
+            {
+                _logger.Debug("Start getting all movies.");
+
+                List<GetAllMoviesResponse>? getAllMoviesResponse = null;
+
+                var movies = await _movieBl.GetAllMovies();
+
+                if (movies != null && movies.Count > 0)
+                {
+                    getAllMoviesResponse = movies.Select(movie => new GetAllMoviesResponse
+                    {
+                        Id = movie.Id,
+                        Title = movie.Title,
+                        Description = movie.Description,
+                        MovieType = movie.MovieType,
+                        Duration = movie.Duration,
+                        ReleaseDate = movie.ReleaseDate,
+                        AddedDate = movie.AddedDate,
+                        Owned = movie.Owned
+                    }).ToList();
+                }
+
+                _logger.Info("Completed getting all movies.");
+
+                return getAllMoviesResponse;
+            }
+            catch (Exception exception)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, exception.Message);
+            }
+        }
+
+        /// <summary>
         /// Get movie by id.
         /// </summary>
         /// <param name="id">The <see cref="Movie"/> id.</param>
@@ -109,19 +151,19 @@ namespace LegacyVideos.WebApi.Controllers
         /// <exception cref="HttpResponseException"></exception>
         [HttpGet]
         [Route("getmoviesbytitle")]
-        public async Task<List<GetMovieByTitleResponse>> GetMoviesByTitle(string title)
+        public async Task<List<GetMoviesByTitleResponse>> GetMoviesByTitle(string title)
         {
             try
             {
                 _logger.Debug($"Start getting movies by title {title}.");
 
-                List<GetMovieByTitleResponse>? getMovieByTitleResponse = null;
+                List<GetMoviesByTitleResponse>? getMovieByTitleResponse = null;
 
                 var movies = await _movieBl.GetMoviesByTitle(title);
 
                 if (movies != null && movies.Count > 0)
                 {
-                    getMovieByTitleResponse = movies.Select(movie => new GetMovieByTitleResponse
+                    getMovieByTitleResponse = movies.Select(movie => new GetMoviesByTitleResponse
                     {
                         Id = movie.Id,
                         Title = movie.Title,
@@ -152,19 +194,19 @@ namespace LegacyVideos.WebApi.Controllers
         /// <exception cref="HttpResponseException"></exception>
         [HttpGet]
         [Route("getmoviesbyowned")]
-        public async Task<List<GetMovieByOwnedResponse>> GetMoviesByOwned(bool owned)
+        public async Task<List<GetMoviesByOwnedResponse>> GetMoviesByOwned(bool owned)
         {
             try
             {
                 _logger.Debug($"Start getting movies by owned {owned}.");
 
-                List<GetMovieByOwnedResponse>? getMovieByOwnedResponse = null;
+                List<GetMoviesByOwnedResponse>? getMovieByOwnedResponse = null;
 
                 var movies = await _movieBl.GetMoviesByOwned(owned);
 
                 if (movies != null && movies.Count > 0)
                 {
-                    getMovieByOwnedResponse = movies.Select(movie => new GetMovieByOwnedResponse
+                    getMovieByOwnedResponse = movies.Select(movie => new GetMoviesByOwnedResponse
                     {
                         Id = movie.Id,
                         Title = movie.Title,

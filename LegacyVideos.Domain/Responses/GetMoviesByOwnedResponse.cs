@@ -2,7 +2,7 @@
 
 namespace LegacyVideos.Domain.Responses
 {
-    public class GetMovieByTitleResponse
+    public class GetMoviesByOwnedResponse
     {
         /// <summary>
         /// The movie id.

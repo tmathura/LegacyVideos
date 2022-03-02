@@ -43,6 +43,29 @@ namespace LegacyVideos.Core.Implementations
         }
 
         /// <summary>
+        /// Get all movies.
+        /// </summary>
+        /// <returns><see cref="Movie"/>s</returns>
+        public async Task<List<Movie>> GetAllMovies()
+        {
+            try
+            {
+                _logger.Debug("Getting all movies.");
+
+                var movies = await _movieDal.GetAllMovies();
+
+                _logger.Debug("Completed getting all movies.");
+
+                return movies;
+            }
+            catch (Exception exception)
+            {
+                _logger.Error($"{exception.Message} - {exception.StackTrace}");
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Get movie by id.
         /// </summary>
         /// <param name="id">Id of movie to lookup.</param>

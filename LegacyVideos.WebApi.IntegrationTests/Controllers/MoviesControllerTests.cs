@@ -173,6 +173,51 @@ namespace LegacyVideos.WebApi.IntegrationTests.Controllers
         }
 
         /// <summary>
+        /// Add a 2 new movies, then get all and validate that the movies were retrieved correctly.
+        /// </summary>
+        [Fact]
+        public async Task GetAllMovies()
+        {
+            // Arrange
+            const string title = "The Matrix";
+            const string description = "Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.";
+            const int movieType = 2;
+            const int duration = 136;
+            const string releaseDate = "1999-03-30";
+            const string addedDate = "2022-03-01";
+            const bool owned = true;
+
+            var addMovieRequest = new
+            {
+                title = title,
+                description = description,
+                movietype = movieType,
+                duration = duration,
+                releasedate = releaseDate,
+                addeddate = addedDate,
+                owned = owned
+            };
+
+            var response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, addMovieRequest);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic movieId = JsonConvert.DeserializeObject(response.Content);
+            Assert.NotNull(movieId);
+
+            response = await _commonHelper.CallEndPoint("api/movies", null, Method.Post, addMovieRequest);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            movieId = JsonConvert.DeserializeObject(response.Content);
+            Assert.NotNull(movieId);
+
+            // Act
+            response = await _commonHelper.CallEndPoint("api/movies", null, Method.Get, null);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            dynamic getMoviesByOwnedResponse = JsonConvert.DeserializeObject(response.Content);
+
+            // Assert
+            Assert.True(getMoviesByOwnedResponse.Count > 1);
+        }
+
+        /// <summary>
         /// Add a new movie, then get it by title and validate that the movies were retrieved correctly.
         /// </summary>
         [Fact]

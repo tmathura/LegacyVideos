@@ -77,6 +77,40 @@ namespace LegacyVideos.Infrastructure.Implementations
 
             return Convert.ToInt32(await sqlCommand.ExecuteScalarAsync());
         }
+        
+        /// <summary>
+        /// Get all movies.
+        /// </summary>
+        /// <returns><see cref="Movie"/>s</returns>
+        public async Task<List<Movie>> GetAllMovies()
+        {
+            List<Movie> movies;
+
+            await using var sqlConnection = new SqlConnection(_connectionString);
+            await sqlConnection.OpenAsync();
+            var sqlCommand = sqlConnection.CreateCommand();
+            var sqlTransaction = sqlConnection.BeginTransaction();
+            sqlCommand.Transaction = sqlTransaction;
+
+            try
+            {
+                _logger.Debug("Getting all movies.");
+
+                movies = await GetMovies(null, null, null, sqlCommand);
+
+                await sqlTransaction.CommitAsync();
+
+                _logger.Debug("Completed getting all movies.");
+            }
+            catch (Exception exception)
+            {
+                _logger.Error($"{exception.Message} - {exception.StackTrace}");
+                await sqlTransaction.RollbackAsync();
+                throw;
+            }
+
+            return movies;
+        }
 
         /// <summary>
         /// Get movie by id.

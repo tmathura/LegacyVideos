@@ -11,6 +11,12 @@ namespace LegacyVideos.Core.Interfaces
         Task<int> AddMovie(Movie movie);
 
         /// <summary>
+        /// Get all movies.
+        /// </summary>
+        /// <returns><see cref="Movie"/>s</returns>
+        Task<List<Movie>> GetAllMovies();
+
+        /// <summary>
         /// Get movie by id.
         /// </summary>
         /// <param name="id">Id of movie to lookup.</param>

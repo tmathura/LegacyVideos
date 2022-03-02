@@ -63,6 +63,38 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Implementations
         }
 
         /// <summary>
+        /// Get all <see cref="Movie"/>s.
+        /// </summary>
+        [Fact]
+        public async Task GetAllMovies()
+        {
+            // Arrange
+            List<Movie> movies;
+            const int numberOfMovies = 17;
+
+            await using var sqlConnection = new SqlConnection(_commonHelper.Settings.Database.ConnectionString);
+            await sqlConnection.OpenAsync();
+            var sqlCommand = sqlConnection.CreateCommand();
+            var sqlTransaction = sqlConnection.BeginTransaction();
+            sqlCommand.Transaction = sqlTransaction;
+
+            await AddMovieToDatabase(sqlCommand, numberOfMovies);
+
+            // Act
+            try
+            {
+                movies = await _movieDal.GetMovies(null, null, null, sqlCommand);
+            }
+            finally
+            {
+                await sqlTransaction.RollbackAsync();
+            }
+
+            // Assert
+            Assert.Equal(numberOfMovies, movies.Count);
+        }
+
+        /// <summary>
         /// Get a <see cref="Movie"/> by id.
         /// </summary>
         [Fact]

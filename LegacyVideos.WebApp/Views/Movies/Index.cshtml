@@ -1,0 +1,21 @@
+﻿@model LegacyVideos.WebApp.Models.IndexModel
+
+@{
+	ViewData["Title"] = "Movies";
+}
+
+<div class="container">
+	<div class="row row-cols-1 row-cols-md-3 g-4">
+		@foreach (var movie in Model.Movies)
+		{
+			<div class="col">
+				<div class="card h-100">
+					<div class="card-body">
+						<h5 class="card-title">@movie.Title</h5>
+						<p class="card-text">@movie.Description</p>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+</div>

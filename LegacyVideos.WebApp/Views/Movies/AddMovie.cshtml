@@ -1,0 +1,53 @@
+﻿@model LegacyVideos.WebApp.Models.AddMovieModel
+
+@{
+    ViewData["Title"] = "Add Movie";
+}
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("AddMovieSubmit", "Movies", FormMethod.Post))
+{
+	<div class="mb-3">
+		<div class="form-floating">
+			@Html.TextBoxFor(model => model.Movie.Title, new { id = $"movie_title_{Model.Movie.Id}", @class = "form-control", placeholder = "Enter title here" })
+			<label for="@($"movie_title_{Model.Movie.Id}")">Title</label>
+		</div>
+	</div>
+	
+	<div class="mb-3">
+		<div class="form-floating">
+			@Html.TextAreaFor(model => model.Movie.Description, new { id = $"movie_description_{Model.Movie.Id}", @class = "form-control", placeholder = "Enter description here" })
+			<label for="@($"movie_description_{Model.Movie.Id}")">Description</label>
+		</div>
+	</div>
+	
+	<div class="mb-3">
+		<label for="@($"movie_movie_type_{Model.Movie.Id}")" class="form-label">Movie Type</label>
+		@Html.DropDownListFor(model => model.Movie.MovieType, Model.EnumMovieTypeToList(), new { id = $"movie_movie_type_{Model.Movie.Id}", @class = "form-control"})
+	</div>
+	
+	<div class="mb-3">
+		<label for="@($"movie_duration_{Model.Movie.Id}")" class="form-label">Duration</label>
+		<input type="number" name="amountInput" min="0" max="20" value="0" class="form-control" oninput="this.form.amountRange.value=this.value" disabled />
+		@Html.TextBoxFor(model => model.Movie.Duration, new { id = $"movie_duration_{Model.Movie.Id}", type = "range", min = 0, max = 240, @class = "form-range", oninput="this.form.amountInput.value=this.value"})
+	</div>
+	
+	<div class="mb-3">
+		<label for="@($"movie_release_date_{Model.Movie.Id}")" class="form-label">Release Date</label>
+		@Html.TextBoxFor(model => model.Movie.ReleaseDate, new { id = $"movie_release_date_{Model.Movie.Id}", @class = "form-control", type = "date" })
+	</div>
+	
+	<div class="mb-3">
+		<label for="@($"movie_added_date_{Model.Movie.Id}")" class="form-label">Added Date</label>
+		@Html.TextBoxFor(model => model.Movie.AddedDate, new { id = $"movie_added_date_{Model.Movie.Id}", @class = "form-control", type = "date" })
+	</div>
+	
+	<div class="mb-3">
+		<div class="form-check form-switch">
+			@Html.CheckBoxFor(model => model.Movie.Owned, new { id = $"movie_owned_{Model.Movie.Id}", @class = "form-check-input" })
+			<label class="form-check-label" for="@($"movie_owned_{Model.Movie.Id}")">Owned</label>
+		</div>
+	</div>
+
+	<button id="addMovieSubmit" type="submit" name="AddMovieSubmit" formmethod="post" class="btn btn-dark">Add Movie</button>
+}

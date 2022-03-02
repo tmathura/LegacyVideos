@@ -1,4 +1,5 @@
-﻿@model LegacyVideos.WebApp.Models.AddMovieModel
+﻿@using LegacyVideos.WebApp.Helpers
+@model LegacyVideos.WebApp.Models.AddMovieModel
 
 @{
     ViewData["Title"] = "Add Movie";
@@ -23,7 +24,7 @@
 	
 	<div class="mb-3">
 		@Html.LabelFor(model => model.Movie.MovieType, "Movie Type", new { @class = "form-label" })
-		@Html.DropDownListFor(model => model.Movie.MovieType, Model.EnumMovieTypeToList(), new { @class = "form-control"})
+		@Html.DropDownListFor(model => model.Movie.MovieType, EnumHelper.EnumMovieTypeToList(), new { @class = "form-control"})
 	</div>
 	
 	<div class="mb-3">

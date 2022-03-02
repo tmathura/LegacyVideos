@@ -1,4 +1,5 @@
-﻿@model LegacyVideos.WebApp.Models.UpdateMovieModel
+﻿@using LegacyVideos.WebApp.Helpers
+@model LegacyVideos.WebApp.Models.UpdateMovieModel
 
 @{
     ViewData["Title"] = "Update Movie";
@@ -25,7 +26,7 @@
 	
 	<div class="mb-3">
 		@Html.LabelFor(model => model.Movie.MovieType, "Movie Type", new { @class = "form-label" })
-		@Html.DropDownListFor(model => model.Movie.MovieType, Model.EnumMovieTypeToList(), new { @class = "form-control"})
+		@Html.DropDownListFor(model => model.Movie.MovieType, EnumHelper.EnumMovieTypeToList(), new { @class = "form-control"})
 	</div>
 	
 	<div class="mb-3">
@@ -50,6 +51,28 @@
 			@Html.LabelFor(model => model.Movie.Owned, new { @class = "form-check-label" })
 		</div>
 	</div>
+	
+	<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target=@($"#modal_{Model.Movie.Id}")>
+		Delete Movie
+	</button>
 
+	<!-- Modal -->
+	<div class="modal fade" id=@($"modal_{Model.Movie.Id}") tabindex="-1" aria-labelledby=@($"modal_label_{Model.Movie.Id}") aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id=@($"modal_label_{Model.Movie.Id}")>Delete movie?</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					Do you want to delete the movie '@(Model.Movie.Title)'?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-dark" data-bs-dismiss="modal">No</button>
+					@Html.ActionLink(linkText: "Yes",  actionName: "DeleteMovie",  routeValues: new { id = Model.Movie.Id }, htmlAttributes: new { @class = "btn btn-danger" })
+				</div>
+			</div>
+		</div>
+	</div>
 	<button id="updateMovieSubmit" type="submit" name="UpdateMovieSubmit" formmethod="post" class="btn btn-dark">Update Movie</button>
 }

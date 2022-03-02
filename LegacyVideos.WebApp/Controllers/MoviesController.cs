@@ -21,7 +21,7 @@ namespace LegacyVideos.WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var model = new IndexModel();
-            var movies = await _webAppClient.Movies.GetMovies();
+            var movies = await _webAppClient.Movies.GetAllMovies();
             model.Movies = movies;
 
             return View(model);
@@ -54,7 +54,38 @@ namespace LegacyVideos.WebApp.Controllers
 
             var id = await _webAppClient.Movies.AddMovie(addMovieRequest);
 
-            return View("AddedMoviedSuccess");
+            return View("AddedMovieSuccess");
+        }
+
+        public async Task<IActionResult> UpdateMovie(int id)
+        {
+            var model = new UpdateMovieModel();
+
+            var movie = await _webAppClient.Movies.GetMovieById(id);
+            model.Movie = movie;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateMovieSubmit(AddMovieModel model)
+        {
+
+            var updateMovieRequest = new UpdateMovieRequest
+            {
+                Id = model.Movie.Id,
+                Title = model.Movie.Title,
+                Description = model.Movie.Description,
+                MovieType = model.Movie.MovieType,
+                Duration = model.Movie.Duration,
+                ReleaseDate = model.Movie.ReleaseDate,
+                AddedDate = model.Movie.AddedDate,
+                Owned = model.Movie.Owned
+            };
+
+            await _webAppClient.Movies.UpdateMovie(updateMovieRequest);
+
+            return View("UpdatedMovieSuccess");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

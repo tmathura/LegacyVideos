@@ -1,12 +1,14 @@
-﻿@model LegacyVideos.WebApp.Models.AddMovieModel
+﻿@model LegacyVideos.WebApp.Models.UpdateMovieModel
 
 @{
-    ViewData["Title"] = "Add Movie";
+    ViewData["Title"] = "Update Movie";
 }
 <h1>@ViewData["Title"]</h1>
 
-@using (Html.BeginForm("AddMovieSubmit", "Movies", FormMethod.Post))
+@using (Html.BeginForm("UpdateMovieSubmit", "Movies", FormMethod.Post))
 {
+	@Html.HiddenFor(model => model.Movie.Id)
+
 	<div class="mb-3">
 		<div class="form-floating">
 			@Html.TextBoxFor(model => model.Movie.Title, new { @class = "form-control", placeholder = "Enter title here" })
@@ -34,12 +36,12 @@
 	
 	<div class="mb-3">
 		@Html.LabelFor(model => model.Movie.ReleaseDate, "Release Date", new { @class = "form-label" })
-		@Html.TextBoxFor(model => model.Movie.ReleaseDate, new { @class = "form-control", type = "date" })
+		@Html.TextBoxFor(model => model.Movie.ReleaseDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
 	</div>
 	
 	<div class="mb-3">
 		@Html.LabelFor(model => model.Movie.AddedDate, "Added Date", new { @class = "form-label" })
-		@Html.TextBoxFor(model => model.Movie.AddedDate, new { @class = "form-control", type = "date" })
+		@Html.TextBoxFor(model => model.Movie.AddedDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
 	</div>
 	
 	<div class="mb-3">
@@ -49,5 +51,5 @@
 		</div>
 	</div>
 
-	<button id="addMovieSubmit" type="submit" name="AddMovieSubmit" formmethod="post" class="btn btn-dark">Add Movie</button>
+	<button id="updateMovieSubmit" type="submit" name="UpdateMovieSubmit" formmethod="post" class="btn btn-dark">Update Movie</button>
 }

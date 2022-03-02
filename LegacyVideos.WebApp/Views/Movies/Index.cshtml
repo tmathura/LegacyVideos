@@ -13,6 +13,7 @@
 					<div class="card-body">
 						<h5 class="card-title">@movie.Title</h5>
 						<p class="card-text">@movie.Description</p>
+						@Html.ActionLink(linkText: "Update",  actionName: "UpdateMovie",  routeValues: new { id = movie.Id }, htmlAttributes: new { @class = "btn btn-dark btn-sm" })
 					</div>
 				</div>
 			</div>

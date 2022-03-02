@@ -277,7 +277,6 @@ namespace LegacyVideos.WebApi.Controllers
         /// Update movie.
         /// </summary>
         /// <param name="updateMovieRequest">The <see cref="Movie"/> to update.</param>
-        /// <returns>Movie Id</returns>
         /// <exception cref="HttpResponseException"></exception>
         [HttpPut]
         [Route("")]
@@ -313,7 +312,6 @@ namespace LegacyVideos.WebApi.Controllers
         /// Delete movie.
         /// </summary>
         /// <param name="id"><see cref="Movie"/> id to delete.</param>
-        /// <returns>Movie Id</returns>
         /// <exception cref="HttpResponseException"></exception>
         [HttpDelete]
         [Route("")]

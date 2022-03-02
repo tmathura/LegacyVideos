@@ -25,5 +25,5 @@ GO
 PRINT N'Adding foreign keys to [dbo].[series_episode]'
 GO
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_series_episode_series_id]','F') AND parent_object_id = OBJECT_ID(N'[dbo].[series_episode]', 'U'))
-ALTER TABLE [dbo].[series_episode] ADD CONSTRAINT [FK_series_episode_series_id] FOREIGN KEY ([series_id]) REFERENCES [dbo].[series] ([id])
+ALTER TABLE [dbo].[series_episode] ADD CONSTRAINT [FK_series_episode_series_id] FOREIGN KEY ([series_id]) REFERENCES [dbo].[series] ([id]) ON DELETE CASCADE
 GO

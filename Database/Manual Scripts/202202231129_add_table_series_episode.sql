@@ -35,5 +35,5 @@ IF NOT EXISTS
 )
 BEGIN
     ALTER TABLE dbo.[series_episode] WITH CHECK
-    ADD CONSTRAINT [FK_series_episode_series_id] FOREIGN KEY ([series_id]) REFERENCES dbo.[series] ([id]);
+    ADD CONSTRAINT [FK_series_episode_series_id] FOREIGN KEY ([series_id]) REFERENCES dbo.[series] ([id]) ON DELETE CASCADE;
 END;

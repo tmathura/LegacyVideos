@@ -38,7 +38,7 @@ BEGIN
            @owned,        -- owned - bit
            @anime;        -- anime - bit
 
-    RETURN SCOPE_IDENTITY();
+    SELECT SCOPE_IDENTITY();
 
 END;
 GO

@@ -20,7 +20,7 @@ namespace LegacyVideos.Infrastructure.IntegrationTests.Factories
                 movies.Add(new Movie
                 {
                     Id = i,
-                    Title = $"Title {i}",
+                    Title = $"Movie title {i}",
                     Description = "This is the description of the movie.",
                     MovieType = randomMovieType,
                     Duration = random.Next(100),

@@ -15,6 +15,8 @@ IConfiguration configuration = builder.Configuration;
 
 builder.Services.AddSingleton<IMovieDal, MovieDal>(serviceProvider => new MovieDal(configuration.GetValue<string>("Database:ConnectionString"))); ;
 builder.Services.AddSingleton<IMovieBl, MovieBl>();
+builder.Services.AddSingleton<ISeriesDal, SeriesDal>(serviceProvider => new SeriesDal(configuration.GetValue<string>("Database:ConnectionString"))); ;
+builder.Services.AddSingleton<ISeriesBl, SeriesBl>();
 
 builder.Services.AddControllers(options =>
 {

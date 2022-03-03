@@ -41,7 +41,7 @@ BEGIN
            @added_date,     -- added_date - datetime
            @owned;          -- owned - bit
 
-    RETURN SCOPE_IDENTITY();
+    SELECT SCOPE_IDENTITY();
 
 END;
 GO

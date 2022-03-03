@@ -1,8 +1,8 @@
 ﻿using LegacyVideos.Domain.Models;
 
-namespace LegacyVideos.WebApp.Models
+namespace LegacyVideos.WebApp.Models.Movies
 {
-    public class AddMovieModel
+    public class UpdateMovieModel
     {
         public Movie Movie { get; set; }
     }

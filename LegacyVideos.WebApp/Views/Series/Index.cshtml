@@ -1,0 +1,21 @@
+﻿@model LegacyVideos.WebApp.Models.Series.IndexModel
+
+@{
+	ViewData["Title"] = "Series";
+}
+
+<div class="container">
+	<div class="row row-cols-1 row-cols-md-3 g-4">
+		@foreach (var series in Model.Series)
+		{
+			<div class="col">
+				<div class="card h-100">
+					<div class="card-body">
+						<h5 class="card-title">@series.Title</h5>
+						<p class="card-text">@series.Description</p>
+					</div>
+				</div>
+			</div>
+		}
+	</div>
+</div>

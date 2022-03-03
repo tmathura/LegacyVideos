@@ -1,6 +1,7 @@
 ﻿using LegacyVideos.Domain.Models;
 using LegacyVideos.Domain.Requests;
 using LegacyVideos.WebApp.Models;
+using LegacyVideos.WebApp.Models.Movies;
 using LegacyVideos.WebApp.Services;
 using log4net;
 using Microsoft.AspNetCore.Mvc;

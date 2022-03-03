@@ -1,0 +1,56 @@
+﻿@model LegacyVideos.WebApp.Models.Series.AddSeriesModel
+
+@{
+    ViewData["Title"] = "Add Series";
+}
+<h1>@ViewData["Title"]</h1>
+
+@using (Html.BeginForm("AddSeriesSubmit", "Series", FormMethod.Post))
+{
+	<div class="mb-3">
+		<div class="form-floating">
+			@Html.TextBoxFor(model => model.Series.Title, new { @class = "form-control", placeholder = "Enter title here" })
+			@Html.LabelFor(model => model.Series.Title, "Title")
+		</div>
+	</div>
+	
+	<div class="mb-3">
+		<div class="form-floating">
+			@Html.TextAreaFor(model => model.Series.Description, new { @class = "form-control", placeholder = "Enter description here" })
+			@Html.LabelFor(model => model.Series.Description, "Description")
+		</div>
+	</div>
+	
+	<div class="mb-3">
+		@Html.LabelFor(model => model.Series.ReleaseDate, "Release Date", new { @class = "form-label" })
+		@Html.TextBoxFor(model => model.Series.ReleaseDate, new { @class = "form-control", type = "date" })
+	</div>
+	
+	<div class="mb-3">
+		@Html.LabelFor(model => model.Series.AddedDate, "Added Date", new { @class = "form-label" })
+		@Html.TextBoxFor(model => model.Series.AddedDate, new { @class = "form-control", type = "date" })
+	</div>
+	
+	<div class="mb-3">
+		<div class="form-check form-switch">
+			@Html.CheckBoxFor(model => model.Series.Ended, new { @class = "form-check-input" })
+			@Html.LabelFor(model => model.Series.Ended, new { @class = "form-check-label" })
+		</div>
+	</div>
+	
+	<div class="mb-3">
+		<div class="form-check form-switch">
+			@Html.CheckBoxFor(model => model.Series.Owned, new { @class = "form-check-input" })
+			@Html.LabelFor(model => model.Series.Owned, new { @class = "form-check-label" })
+		</div>
+	</div>
+	
+	<div class="mb-3">
+		<div class="form-check form-switch">
+			@Html.CheckBoxFor(model => model.Series.Anime, new { @class = "form-check-input" })
+			@Html.LabelFor(model => model.Series.Anime, new { @class = "form-check-label" })
+		</div>
+	</div>
+
+	<button id="addSeriesSubmit" type="submit" name="AddSeriesSubmit" formmethod="post" class="btn btn-dark">Add Series</button>
+}

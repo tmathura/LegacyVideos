@@ -8,4 +8,9 @@ public interface IWebAppClient
     /// Movies service
     /// </summary>
     IMoviesService Movies { get; }
+
+    /// <summary>
+    /// Series service
+    /// </summary>
+    ISeriesService Series { get; }
 }

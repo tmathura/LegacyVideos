@@ -1,6 +1,6 @@
 ﻿using LegacyVideos.Domain.Models;
 
-namespace LegacyVideos.WebApp.Models
+namespace LegacyVideos.WebApp.Models.Movies
 {
     public class IndexModel
     {

@@ -2,6 +2,7 @@
 using LegacyVideos.Domain.Requests;
 using LegacyVideos.WebApp.Models;
 using LegacyVideos.WebApp.Services;
+using log4net;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -9,17 +10,18 @@ namespace LegacyVideos.WebApp.Controllers
 {
     public class MoviesController : Controller
     {
-        private readonly ILogger<MoviesController> _logger;
         private readonly IWebAppClient _webAppClient;
+        private readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
-        public MoviesController(ILogger<MoviesController> logger, IWebAppClient webAppClient)
+        public MoviesController(IWebAppClient webAppClient)
         {
-            _logger = logger;
             _webAppClient = webAppClient;
         }
 
         public async Task<IActionResult> Index()
         {
+            _logger.Debug("Navigate to Index");
+
             var model = new IndexModel();
             var movies = await _webAppClient.Movies.GetAllMovies();
             model.Movies = movies;
@@ -29,6 +31,8 @@ namespace LegacyVideos.WebApp.Controllers
 
         public IActionResult AddMovie()
         {
+            _logger.Debug("Navigate to AddMovie");
+
             var model = new AddMovieModel
             {
                 Movie = new Movie()
@@ -40,6 +44,7 @@ namespace LegacyVideos.WebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> AddMovieSubmit(AddMovieModel model)
         {
+            _logger.Debug("Doing add movie submit");
 
             var addMovieRequest = new AddMovieRequest
             {
@@ -54,11 +59,15 @@ namespace LegacyVideos.WebApp.Controllers
 
             var id = await _webAppClient.Movies.AddMovie(addMovieRequest);
 
+            _logger.Debug("Navigate to AddedMovieSuccess");
+
             return View("AddedMovieSuccess");
         }
 
         public async Task<IActionResult> UpdateMovie(int id)
         {
+            _logger.Debug("Navigate to UpdateMovie");
+
             var model = new UpdateMovieModel();
 
             var movie = await _webAppClient.Movies.GetMovieById(id);
@@ -70,6 +79,7 @@ namespace LegacyVideos.WebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> UpdateMovieSubmit(AddMovieModel model)
         {
+            _logger.Debug("Doing update movie submit");
 
             var updateMovieRequest = new UpdateMovieRequest
             {
@@ -85,12 +95,18 @@ namespace LegacyVideos.WebApp.Controllers
 
             await _webAppClient.Movies.UpdateMovie(updateMovieRequest);
 
+            _logger.Debug("Navigate to UpdatedMovieSuccess");
+
             return View("UpdatedMovieSuccess");
         }
 
         public async Task<IActionResult> DeleteMovie(int id)
         {
+            _logger.Debug("Doing delete movie");
+
             await _webAppClient.Movies.DeleteMovie(id);
+
+            _logger.Debug("Navigate to DeleteMovieSuccess");
 
             return View("DeleteMovieSuccess");
         }

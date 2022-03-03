@@ -14,7 +14,7 @@ namespace LegacyVideos.WebApi.Controllers
     public class MoviesController : ControllerBase
     {
         private readonly IMovieBl _movieBl;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(MoviesController));
+        private readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
         public MoviesController(IMovieBl movieBl)
         {

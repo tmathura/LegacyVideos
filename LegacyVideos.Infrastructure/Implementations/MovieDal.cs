@@ -15,7 +15,7 @@ namespace LegacyVideos.Infrastructure.Implementations
     public class MovieDal : IMovieDal
     {
         private readonly string _connectionString;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(MovieDal));
+        private readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
         public MovieDal(string connectionString)
         {

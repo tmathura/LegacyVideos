@@ -6,7 +6,7 @@ namespace LegacyVideos.WebApi.Filters
 {
     public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
     {
-        private readonly ILog _logger = LogManager.GetLogger(typeof(HttpResponseExceptionFilter));
+        private readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
         public int Order => int.MaxValue - 10;
 

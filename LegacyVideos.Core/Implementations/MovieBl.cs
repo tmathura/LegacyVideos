@@ -12,7 +12,7 @@ namespace LegacyVideos.Core.Implementations
     public class MovieBl : IMovieBl
     {
         private readonly IMovieDal _movieDal;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(MovieBl));
+        private readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod()?.DeclaringType);
 
         public MovieBl(IMovieDal movieDal)
         {

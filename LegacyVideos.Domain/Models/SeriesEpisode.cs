@@ -1,6 +1,4 @@
-﻿using LegacyVideos.Domain.Enums;
-
-namespace LegacyVideos.Domain.Models
+﻿namespace LegacyVideos.Domain.Models
 {
     public class SeriesEpisode
     {
